@@ -1,0 +1,7 @@
+mysql查询优化总结：
+加索引，尽量保证使用索引
+筛出来的数据量要小
+promise.all并行执行
+Where条件的顺序
+countDistinct和groupby慢，用的exists变快
+Join代替子查询

@@ -1,0 +1,176 @@
+面试：
+
+一、React优势 设计理念 diff原理
+react：
+1、选型原因
+Why React? 
+社区生态强大，Facebook光环 加持; UI组件库丰富高质，如Antd; 采用函数式编程，摒弃双向数据 绑定和指令集; Redux单向数据流设计，可控、 可测、可维护 
+
+Why Nodejs? 
+高并发，IO密集型的web应用 非阻塞IO适合做中间层服务 代码量减少 语言通用易学习 
+
+
+二、组件拆分 自己的ui私有仓库
+组件与逻辑的复用：回调渲染模式 slot、minin
+
+组件拆分
+注入逻辑的实现办法：1、父组件；2、高阶组件；3、继承
+2、高阶组件  属性代理&反向继承
+3、为什么建议传递给 setState 的参数是一个 callback 而不是一个对象
+渲染回调（Render Callbacks）
+
+
+三、生命周期
+
+
+三、性能优化 避免rerender
+1、stateless 无状态组件 因为省去了许多生命周期的 Hook，所以会有性能的提升
+组件不会被实例化，整体渲染性能得到提升
+因为组件被精简成一个render方法的函数来实现的，由于是无状态组件，所以无状态组件就不会在有组件实例化的过程，无实例化过程也就不需要分配多余的内存，从而性能得到一定的提升。
+
+
+无状态组件一般会搭配高阶组件（简称：OHC）一起使用，高阶组件用来托管state，Redux 框架就是通过 store 管理数据源和所有状态，其中所有负责展示的组件都使用无状态函数式的写法。
+这种模式被鼓励在大型项目中尽可能以简单的写法 来分割原本庞大的组件，而未来 React 也会面向这种无状态的组件进行一些专门的优化，比如避免无意义的检查或内存分配。所以建议大家尽可能在项目中使用无状态组件。
+
+
+高阶组件的存在有两个好处：
+* 当写着写着无状态组件的时候，有一天忽然发现需要状态处理了，那么无需彻底返工:)
+* 往往我们需要状态的时候，这个需求是可以重用的，例如上面的 withViewport，今后可以用来给其他组件（无论是否是无状态组件）添加 viewport 属性。
+高阶组件加无状态组件，则大大增强了整个代码的可测试性和可维护性。同时不断“诱使”我们写出组合性更好的代码。
+
+
+不清楚shouldcomponentUpdate
+多个react组件性能优化，key的优化
+redux性能优化：reselect（数据获取时优化）
+reselect就应运而生了，它的动作原理：只要相关的状态没有改变，那么就直接使用上一次的缓存结果。
+
+
+
+* 写react有哪些细节可以优化
+
+
+* react-router怎么实现路由切换
+* react-router里的<Link>标签和<a>标签有什么区别
+
+* 前端开发中用到哪些设计模式
+* React/Redux中哪些功能用到了哪些设计模式
+
+
+React开放性问题：给新人的建议
+
+
+3、受控组件( controlled component )与不受控制的组件
+双向数据绑定很少用 改为单向数据流
+
+rudux：
+1、选型原因 
+2、react与redux性能优化
+怎么快速定位哪个组件出现性能问题
+
+3、redux怎么处理异步？
+如怎么做异步API调用、日志记录
+
+3、provider与connect方法
+
+
+
+
+
+2、setState原理
+生命周期可以setState
+
+
+Redux相关：
+connect方法。
+Redux 中间件；Thunk 的作用是什么
+Redux thunk 是一个允许你编写返回一个函数而不是一个 action 的 actions creators 的中间件。如果满足某个条件，thunk 则可以用来延迟 action 的派发(dispatch)，这可以处理异步 action 的派发(dispatch)。
+何为纯函数(pure function)
+一个纯函数是一个不依赖于且不改变其作用域之外的变量状态的函数，这也意味着一个纯函数对于同样的参数总是返回同样的结果。
+
+
+nodejs相关问题：
+用过express 只是静态资源服务器&api转发
+
+
+
+写个Promisefy 把异步函数Promisefy化同步函数的方法
+MyPromise.promisify = function(fn) {
+    return function() {
+        var args = Array.from(arguments);
+        return new MyPromise(function(resolve, reject) {
+            fn.apply(null, args.concat(function(err) {
+                err ? reject(err) : resolve(arguments[1])
+            }));
+        })
+    }
+}
+虽然方法很强大，但是实现起来并没有很难，想在外边直接调用promise的方法那就返回一个promise呗，内部将原来参数后面拼接一个回调函数参数，在回调函数里执行这个promise的reslove方法把结果传出去，promiseify就实现了。
+
+
+Why Koa2? 
+1、Express是Web Framework，koa是中间件框架，灵活宽松、简洁轻量，只有基本功能。 给了社区很大的自由度，各位大神都能自由发挥制作出更精细更专业的中间件。洋葱型 
+2、终结异步回调:自nodejs发布到7.x以后，koa2直接支持async/await。 Express可以用promise、async，(弱化cbhell，不能真正消除回调) Callback 有两大硬伤，一是不可组合，二是异常不可捕获。 Koa1使用generate和co(真正意义上实现同步方式来写异步编程) 
+koa2使用async/await(首先它本身是generator语法糖，自带执行器，更具语义化，适用性更广。其 次，它并不需要像co这样的第三方实现，而是原生支持的) 
+
+
+异常处理：
+* 		在代码块中通过try catch来捕获异常，这种方法对于异步处理无法捕获。
+* 		采用捕获进程中的uncaughtException事件，这种处理方式一方面发生请求错误的时候无法响应请求，這可能会导致服 务器内存溢出。
+
+* 介绍下React高阶组件，和普通组件有什么区别
+* React16.3对生命周期的改变
+
+
+
+前端基础：
+cdn部署、
+页面为什么用多个cdn域名？不清楚
+定时器原理 ；setTimeout为0不能立即执行 ；setInterval执行期间 主队列被阻塞后变空闲，setInterval插入的多个回调会短时间内马上执行吗？
+http状态
+那些操作会造成内存泄漏
+全局变量、闭包、DOM清空或删除时，事件未清除、子元素存在引用
+闭包的应用场景？
+
+JS垃圾回收机制？
+* JS里垃圾回收机制是什么，常用的是哪种，怎么处理的
+
+
+单个react组件内部性能优化
+2.1，render里面尽量减少新建变量和bind函数，传递参数是尽量减少传递参数的数量。
+
+
+Vue选型原因
+组件化或模块化
+
+组件级别的优化
+Diff算法对写代码的指导意义？
+节点类型不同
+所以在开发过程中，我们应该尽量避免上面的情况，不要将包裹节点的类型随意改变。
+两个节点类型一样
+这里包括两种情况，一种是节点是Dom类型，还有一种react组件。
+多个子组件情况
+
+
+vue mixin
+Vue双向数据绑定适用在什么场景？有什么优缺点？
+Vue插槽slot模式用过吗
+
+怎么快速定位哪个组件出现性能问题？
+常见的vue性能优化手段
+怎么及时定位CPU占用过高的组件？
+怎么组件级别单元测试？事件或者断言、快照.  浅渲染、真实DOM渲染
+
+
+Promise.all 串行实现？
+Then 第二个参数和catch区别
+Catch中的错误怎么捕获？
+异常捕获
+
+Pm2 主进程挂了，会怎样？
+
+安全攻击
+性能监控？怎么
+
+对线上问题追踪
+
+
